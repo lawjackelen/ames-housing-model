@@ -1,185 +1,113 @@
-# Project 2 - Ames Housing Data and Kaggle Challenge
+# Project 2: Ames Housing Pricing Model
 
-Welcome to Project 2! It's time to start modeling.
+### Contents:
+- [Problem Statement](#Problem-Statement)
+- [Executive Summary](#Executive-Summary)
+- [Conclusions and Recommendations](#Conclusions-and-Recommendations)
+- [Data Dictionary](#Data-Dictionary)
+- [Sources](#Sources)
 
-## Primary Learning Objectives
+### Problem Statement
 
-1. Creating and iteratively refining a regression model
-2. Using [Kaggle](https://www.kaggle.com/) to practice the modeling process
-3. Providing business insights through reporting and presentation.
+Our firm wants to diversify our portfolio by getting into the real estate business in Ames, Iowa. Like any instrument, we want to know if our return will make the investment worthwhile.
+Using available data, build a linear regression model for estimating the sale price of a home. Which types of attributes are good indicators of value and which detract? How accurate can we be?
 
-You are tasked with creating a regression model based on the Ames Housing Dataset. This model will predict the price of a house at sale.
+### Executive Summary
 
-The Ames Housing Dataset is an exceptionally detailed and robust dataset with over 70 columns of different features relating to houses.
+The project is separated into two parts: (1) EDA and Cleaning (2) Regression and Analysis
+<br><br>
+(1) EDA and Date Cleaning
+The workbook imports the Ames housing dataset comprised of 2051 individual residential properties sold in Ames, Iowa from 2006 to 2010. Each record included 78 exploratory variables and the target variable sale price. Each exploratory variable was cleaned, examined, and analyzed for inclusion in the final model. Techniques such as null-handling through imputation, dummy variables on categorical variables, and outlier removal were used as well as engineering new features from the data.
+<br><br>
+(2) Regression and Analysis
+84 exploratory variables were initally available for modelling. An initial linear regression was performed across all exploratory variables and reviewed against a train-test split as well as cross validation scoring. The variables were then standard scaled to perform Lasso and Ridge regressions. Finally, feature selection through both Lasso cross validation and Ridge cross validation were performed, indicating that only 57 the original 84 exploratory variables were important to our model. These 57 variables were kept and linear regression was again performed on regular scaled dataset to generate our model's final coefficients.
 
-Secondly, we are hosting a competition on Kaggle to give you the opportunity to practice the following skills:
+### Conclusions and Recommendations
 
-- Refining models over time
-- Use of train-test split, cross-validation, and data with unknown values for the target to simulate the modeling process
-- The use of Kaggle as a place to practice data science
+There are a wide range of exploratory variables that have an affect on the target variable sale price according to our model. Witihin the context of the magnitude of these variables' units, the most impacting variables were identified.
 
-As always, you will be submitting a technical report and a presentation. **You may find that the best model for Kaggle is not the best model to address your data science problem.**
+Three most positively impacting variables:
+  *  Membership in Neighborhood Grouping 3
+    *  a generated collection of neighborhoods that had a mean sale price one standard deviation above the overal sale price mean.
+    *  membership here adds \$33k in expected sale price holding all else constant
+  *  Above Grade Living Area (Square Footage):
+    *  every 500 sqft adds \$25k in expected sale price holding all else constant
+  *  Location in 'Floating Village Residential' zone
+    *  houses sold in this zone see a \$15k increase in expected sale price holding all else constant
+    *  for context, the second highest-scoring zone is 'Residential Low Density' at \$4k
 
-## Set-up
+Three most negatively impacting variables:
+  *  Presence of a basement
+    *  houses with a basement saw a \$23K decrease in expected sale price holding all else constant
+  *  Home Age
+    *  each year before 2010 that a home was built decreases the expected sale price \$200 holding all else constant
+    *  this translates to a \$20K difference for a home over 100 years old
+  *  Home Remodels
+    *  houses that were remodeled saw a \$3.6K decrease in expected sale price holding all else constant
 
-Before you begin working on this project, please do the following:
+In place of sufficient values being available for the 57 variables included in the model, prioritizing the above variables will maximize impact on the expected sale price.
 
-1. Sign up for an account on [Kaggle](https://www.kaggle.com/)
-2. **IMPORTANT**: Click this link ([Regression Challenge Sign Up](https://www.kaggle.com/t/33375edd88834274bbd288183239b333)) to **join** the competition (otherwise you will not be able to make submissions!)
-3. Review the material on the [DSIR-425 Regression Challenge](https://www.kaggle.com/c/dsir-425-project-2)
-4. Review the [data description](http://jse.amstat.org/v19n3/decock/DataDocumentation.txt).
+### Data Dictionary
 
-## The Modeling Process
+|Feature|Type|Dataset|Description|
+|---|---|---|---|
+|1st_flr_sf|*int*|Ames Housing Data|First Floor square feet|
+|all_porch_sf|*int*|Ames Housing Data|Total square feet across all porch types|
+|bedroom_abvgr|*int*|Ames Housing Data|Bedrooms above grade (does NOT include basement bedrooms)|
+|bldg_type_1Fam|*int*|Ames Housing Data|Indicator for Type of dwelling being Singel-family Detached|
+|bsmt_ALQ_sf|*float*|Ames Housing Data|Total square feet across basement finished areas rated Average Living Quarters|
+|bsmt_BLQ_sf|*float*|Ames Housing Data|Total square feet across basement finished areas rated Below Average Living Quarters|
+|bsmt_cond_is_TA_Gd_Ex|*int*|Ames Housing Data|Indicator for general condition of the basemetn being Excellent, Good, or Typical-slight dampness allowed|
+|bsmt_GLQ_sf|*float*|Ames Housing Data|Total square feet across basement finished areas rated Good Living Quarters|
+|bsmt_qual_Ex_Gd|*int*|Ames Housing Data|Indicator for height of the basement being 90+ inches|
+|electrical_is_SBrkr|*int*|Ames Housing Data|Indicator for Electrical system being Standard Circuit Breakers & Romex|
+|exter_qual_Ex_Gd|*int*|Ames Housing Data|Indicator for quality of the material on the exterior being Excellent or Good|
+|exterior_has_HdBoard|*int*|Ames Housing Data|Indicator for Exterior covering on the house includes Hard Board|
+|exterior_has_MetalSd|*int*|Ames Housing Data|Indicator for Exterior covering on the house includes Metal Siding|
+|exterior_has_Plywood|*int*|Ames Housing Data|Indicator for Exterior covering on the house includes Plywood|
+|exterior_has_VinylSd|*int*|Ames Housing Data|Indicator for Exterior covering on the house includes Vinyl Siding|
+|exterior_has_Wd_Sdng|*int*|Ames Housing Data|Indicator for Exterior covering on the house includes Wood Siding|
+|fireplace_qu_Ex_Gd|*int*|Ames Housing Data|Indicator for Fireplace quality being Excellent or Good|
+|foundation_PConc|*int*|Ames Housing Data|Indicator for Type of foundation being Poured Concrete|
+|garage_area|*float*|Ames Housing Data|Size of garage in square feet|
+|garage_finish_Fin|*int*|Ames Housing Data|Indicator for Interior finish of the garage being Finished|
+|garage_finish_RFn|*int*|Ames Housing Data|Indicator for Interior finish of the garage being Rough Finished|
+|garage_new_2006|*int*|Ames Housing Data|Indicator for the Year garage was built being 2006 or newer|
+|gr_liv_area|*int*|Ames Housing Data|Above grade (ground) living area square feet|
+|has_alley|*int*|Ames Housing Data|Indicator for Alley access to the property|
+|has_basement|*int*|Ames Housing Data|Indicator for house having a basement|
+|has_bsmt_exposure|*int*|Ames Housing Data|Indicator for walkout or garden level wall exposure existing|
+|has_central_air|*int*|Ames Housing Data|Indicator for Central air conditioning|
+|has_fence|*int*|Ames Housing Data|Indicator for house having a fence|
+|has_garage|*int*|Ames Housing Data|Indicator for house having a garage|
+|has_porch|*int*|Ames Housing Data|Indicator for house having a porch|
+|home_age|*int*|Ames Housing Data|The age of the house in 2010|
+|home_has_remodel|*int*|Ames Housing Data|Indicator for the house having a remodel|
+|is_fully_paved_drive|*int*|Ames Housing Data|Indicator for Type of road access to property being fully paved|
+|is_functional|*int*|Ames Housing Data|Indicator for Home functionality being Typical functionality|
+|is_heating_qc_Ex|*int*|Ames Housing Data|Indicator for Heating quality and condition being excellent|
+|is_land_countour_hls|*int*|Ames Housing Data|Indicator for Flatness of the property being Hillside - significan slope from side to side|
+|is_land_slope_mod|*int*|Ames Housing Data|Indicator for Slope of property being Moderate|
+|is_lot_shape_regluar|*int*|Ames Housing Data|Indicator for General shape of property being Regular|
+|kitchen_qual_Ex_Gd|*int*|Ames Housing Data|Indicator for Kitchen quality being Excellent or Good|
+|lot_area|*int*|Ames Housing Data|Lot size in square feet|
+|lot_config_Corner|*int*|Ames Housing Data|Indicator for Lot configuration being Corner lot|
+|lot_frontage|*float*|Ames Housing Data|Linear feet of street connected to property|
+|mas_vnr_area|*float*|Ames Housing Data|Masonry veneer area in square feet|
+|mas_vnr_type_BrkFace|*int*|Ames Housing Data|Indicator for Masonry veneer type being Brick Face|
+|mas_vnr_type_Stone|*int*|Ames Housing Data|Indicator for Masonry veneer type being Stone|
+|ms_subclass_group_1|*int*|Ames Housing Data|Indicator for membership in a MS SubClass with an average mean sale price between $101,898 and $181,217|
+|ms_zoning_FV|*int*|Ames Housing Data|Indicator for general zoning classification being Floating Village Residential|
+|ms_zoning_RL|*int*|Ames Housing Data|Indicator for general zoning classification being Residential Low Density|
+|neighborhood_group_1|*int*|Ames Housing Data|Indicator for membership in a Neighborhood with an average mean sale price between $101,898 and $181,217|
+|neighborhood_group_3|*int*|Ames Housing Data|Indicator for membership in a Neighborhood with an average mean sale price $260,536 and above|
+|overall_qual|*int*|Ames Housing Data|Rates the overal material and finish of the house on a scale from 1-10|
+|roof_style_Hip|*int*|Ames Housing Data|Indicator for type of roof being Hip|
+|sale_type_New|*int*|Ames Housing Data|Indicator for type of sale being New - Home just constructed and sold|
+|total_baths|*float*|Ames Housing Data|Total amount of baths where full and half are both considered one bath|
+|total_bsmt_sf|*float*|Ames Housing Data|Total amount of basement square feet|
+|totrms_abvgrd|*int*|Ames Housing Data|Total rooms above grade (does not include bathrooms)|
+|yr_sold_2006|*int*|Ames Housing Data|Indicator for sale date of house being in 2006|
 
-1. The train dataset has all of the columns that you will need to generate and refine your models. The test dataset has all of those columns except for the target that you are trying to predict in your Regression model.
-2. Generate your regression model using the training data. We expect that within this process, you'll be making use of:
-    - train-test split
-    - cross-validation / grid searching for hyperparameters
-    - strong exploratory data analysis to question correlation and relationship across predictive variables
-    - code that reproducibly and consistently applies feature transformation (such as the preprocessing library)
-3. Predict the values for your target column in the test dataset and submit your predictions to Kaggle to see how your model does against unknown data.
-    - **Note**: Kaggle expects to see your submissions in a specific format. Check the challenge's page to make sure you are formatting your CSVs correctly!
-    - **You are limited to models you've learned in class**. In other words, you cannot use XGBoost, Neural Networks or any other advanced model for this project.
-4. Evaluate your models!
-    - consider your evaluation metrics
-    - consider your baseline score
-    - how can your model be used for inference?
-    - why do you believe your model will generalize to new data?
-
-## Submission
-
-Materials must be submitted by the beginning of class on **Tuesday, May 24**.
-
-The last day for the Kaggle competition will be **Tuesday, May 23**.
-
-Your technical report will be hosted on Github Enterprise. Make sure it includes:
-
-- A README.md (that isn't this file)
-- Jupyter notebook(s) with your analysis and models (renamed to describe your project)
-- At least one successful prediction submission on [DSIR-425 Regression Challenge](https://www.kaggle.com/c/dsir-425-project-2) --  you should see your name in the "[Leaderboard](https://www.kaggle.com/c/dsir-425-project-2/leaderboard)" tab.
-- Data files
-- Presentation slides
-- Any other necessary files (images, etc.)
-
-**Check with your local instructor for how they would like you to submit your repo for review.**
-
----
-
-## Presentation Structure
-
-- **Must be within time limit established by local instructor.**
-- Use Google Slides or some other visual aid (Keynote, Powerpoint, etc).
-- Consider the audience. **Check with your local instructor for direction**.
-- Start with the **data science problem**.
-- Use visuals that are appropriately scaled and interpretable.
-- Talk about your procedure/methodology (high level).
-- Talk about your primary findings.
-- Make sure you provide **clear recommendations** that follow logically from your analyses and narrative and answer your data science problem.
-
-Be sure to rehearse and time your presentation before class.
-
----
-
-## Rubric
-
-Your local instructor will evaluate your project (for the most part) using the following criteria.  You should make sure that you consider and/or follow most if not all of the considerations/recommendations outlined below **while** working through your project.
-
-**Scores will be out of 27 points based on the 9 items in the rubric.**
-*3 points per section*
-
-| Score | Interpretation |
-| --- | --- |
-| **0** | *Project fails to meet the minimum requirements for this item.* |
-| **1** | *Project meets the minimum requirements for this item, but falls significantly short of portfolio-ready expectations.* |
-| **2** | *Project exceeds the minimum requirements for this item, but falls short of portfolio-ready expectations.* |
-| **3** | *Project meets or exceeds portfolio-ready expectations; demonstrates a thorough understanding of every outlined consideration.* |
-
-### The Data Science Process
-
-**Problem Statement**
-- Is it clear what the student plans to do?
-- What type of model will be developed?
-- How will success be evaluated?
-- Is the scope of the project appropriate?
-- Is it clear who cares about this or why this is important to investigate?
-- Does the student consider the audience and the primary and secondary stakeholders?
-
-**Data Cleaning and EDA**
-- Are missing values imputed appropriately?
-- Are distributions examined and described?
-- Are outliers identified and addressed?
-- Are appropriate summary statistics provided?
-- Are steps taken during data cleaning and EDA framed appropriately?
-- Does the student address whether or not they are likely to be able to answer their problem statement with the provided data given what they've discovered during EDA?
-
-**Preprocessing and Modeling**
-- Are categorical variables one-hot encoded?
-- Does the student investigate or manufacture features with linear relationships to the target?
-- Have the data been scaled appropriately?
-- Does the student properly split and/or sample the data for validation/training purposes?
-- Does the student utilize feature selection to remove noisy or multi-collinear features?
-- Does the student test and evaluate a variety of models to identify a production algorithm (**AT MINIMUM:** linear regression, lasso, and ridge)?
-- Does the student defend their choice of production model relevant to the data at hand and the problem?
-- Does the student explain how the model works and evaluate its performance successes/downfalls?
-
-**Evaluation and Conceptual Understanding**
-- Does the student accurately identify and explain the baseline score?
-- Does the student select and use metrics relevant to the problem objective?
-- Is more than one metric utilized in order to better assess performance?
-- Does the student interpret the results of their model for purposes of inference?
-- Is domain knowledge demonstrated when interpreting results?
-- Does the student provide appropriate interpretation with regards to descriptive and inferential statistics?
-
-**Conclusion and Recommendations**
-- Does the student provide appropriate context to connect individual steps back to the overall project?
-- Is it clear how the final recommendations were reached?
-- Are the conclusions/recommendations clearly stated?
-- Does the conclusion answer the original problem statement?
-- Does the student address how findings of this research can be applied for the benefit of stakeholders?
-- Are future steps to move the project forward identified?
-
-### Organization and Professionalism
-
-**Project Organization**
-- Are modules imported correctly (using appropriate aliases)?
-- Are data imported/saved using relative paths?
-- Does the README provide a good executive summary of the project?
-- Is markdown formatting used appropriately to structure notebooks?
-- Are there an appropriate amount of comments to support the code?
-- Are files & directories organized correctly?
-- Are there unnecessary files included?
-- Do files and directories have well-structured, appropriate, consistent names?
-
-**Visualizations**
-- Are sufficient visualizations provided?
-- Do plots accurately demonstrate valid relationships?
-- Are plots labeled properly?
-- Are plots interpreted appropriately?
-- Are plots formatted and scaled appropriately for inclusion in a notebook-based technical report?
-
-**Python Syntax and Control Flow**
-- Is care taken to write human readable code?
-- Is the code syntactically correct (no runtime errors)?
-- Does the code generate desired results (logically correct)?
-- Does the code follows general best practices and style guidelines?
-- Are Pandas functions used appropriately?
-- Are `sklearn` methods used appropriately?
-
-**Presentation**
-- Is the problem statement clearly presented?
-- Does a strong narrative run through the presentation building toward a final conclusion?
-- Are the conclusions/recommendations clearly stated?
-- Is the level of technicality appropriate for the intended audience?
-- Is the student substantially over or under time?
-- Does the student appropriately pace their presentation?
-- Does the student deliver their message with clarity and volume?
-- Are appropriate visualizations generated for the intended audience?
-- Are visualizations necessary and useful for supporting conclusions/explaining findings?
-
-In order to pass the project, students must earn a minimum score of 1 for each category.
-- Earning below a 1 in one or more of the above categories would result in a failing project.
-- While a minimum of 1 in each category is the required threshold for graduation, students should aim to earn at least an average of 1.5 across each category. An average score below 1.5, while it may be passing, means students may want to solicit specific feedback in order to significantly improve the project before showcasing it as part of a portfolio or the job search.
-
-### REMEMBER:
-
-This is a learning environment and you are encouraged to try new things, even if they don't work out as well as you planned! While this rubric outlines what we look for in a _good_ project, it is up to you to go above and beyond to create a _great_ project. **Learn from your failures and you'll be prepared to succeed in the workforce**.
+### Sources
+Ames, Iowa Assessor’s Office ([data info](http://jse.amstat.org/v19n3/decock/DataDocumentation.txt))
